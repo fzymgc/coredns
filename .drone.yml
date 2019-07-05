@@ -1,0 +1,65 @@
+--
+kind: pipeline
+name: default-amd64
+
+platform:
+  arch: amd64
+
+clone:
+  depth: 25
+
+steps:
+- name: build
+  image: golang
+  volumes:
+  - name: deps
+    path: /go
+  commands:
+  - pwd && ls
+
+
+# - name: build-docker
+#   image: docker:dind
+#   volumes:
+#   - name: dockersock
+#     path: /var/run
+#   commands:
+#   - sleep 5
+#   - docker ps
+
+# services:
+# - name: docker
+#   image: docker:dind
+#   privileged: true
+#   volumes:
+#   - name: dockersock
+#     path: /var/run
+
+volumes:
+- name: deps
+  temp: {}
+- name: dockersock
+  temp: {}
+
+# --
+# kind: pipeline
+# name: default-arm
+
+# platform:
+#   arch: arm
+
+# clone:
+#   depth: 25
+
+# steps:
+#   - name: build
+#     image: golang
+#     volumes:
+#     - name: deps
+#       path: /go
+
+# volumes:
+# - name: deps
+#   temp: {}
+# - name: dockersock
+#   temp: {}
