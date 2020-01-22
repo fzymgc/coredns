@@ -24,3 +24,10 @@ jobs:
 
       - name: Build
         run: go build -v -ldflags="-s -w -X github.com/coredns/coredns/coremain.GitCommit=$(GITHUB_SHA)" -o coredns
+      
+      - name: Publish Docker Images to GPR
+        uses: machine-learning-apps/gpr-docker-publish@v1.3
+        with:
+          IMAGE_NAME: coredns
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
