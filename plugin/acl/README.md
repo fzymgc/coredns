@@ -4,7 +4,7 @@
 
 ## Description
 
-With `acl` enabled, users are able to block suspicous DNS queries by configuring IP filter rule sets, i.e. allowing authorized queries to recurse or blocking unauthorized queries.
+With `acl` enabled, users are able to block suspicious DNS queries by configuring IP filter rule sets, i.e. allowing authorized queries to recurse or blocking unauthorized queries.
 
 This plugin can be used multiple times per Server Block.
 
@@ -66,3 +66,14 @@ example.org {
     }
 }
 ~~~
+
+## Metrics
+
+If monitoring is enabled (via the _prometheus_ plugin) then the following metrics are exported:
+
+- `coredns_request_block_count_total{server, zone}` - counter of DNS requests being blocked.
+
+- `coredns_request_allow_count_total{server}` - counter of DNS requests being allowed.
+
+The `server` and `zone` labels are explained in the _metrics_ plugin documentation.
+

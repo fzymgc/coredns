@@ -55,7 +55,7 @@ hosts [FILE [ZONES...]] {
 ~~~
 
 * **FILE** the hosts file to read and parse. If the path is relative the path from the *root*
-  directive will be prepended to it. Defaults to /etc/hosts if omitted. We scan the file for changes
+  plugin will be prepended to it. Defaults to /etc/hosts if omitted. We scan the file for changes
   every 5 seconds.
 * **ZONES** zones it should be authoritative for. If empty, the zones from the configuration block
    are used.
@@ -71,6 +71,13 @@ hosts [FILE [ZONES...]] {
   If **[ZONES...]** is omitted, then fallthrough happens for all zones for which the plugin
   is authoritative. If specific zones are listed (for example `in-addr.arpa` and `ip6.arpa`), then only
   queries for those zones will be subject to fallthrough.
+
+## Metrics
+
+If monitoring is enabled (via the *prometheus* plugin) then the following metrics are exported:
+
+- `coredns_hosts_entries_count{}` - The combined number of entries in hosts and Corefile.
+- `coredns_hosts_reload_timestamp_seconds{}` - The timestamp of the last reload of hosts file.
 
 ## Examples
 
@@ -104,11 +111,12 @@ next plugin if query doesn't match.
 Load hosts file inlined in Corefile.
 
 ~~~
-. {
-    hosts example.hosts example.org {
+example.hosts example.org {
+    hosts {
         10.0.0.1 example.org
         fallthrough
     }
+    whoami
 }
 ~~~
 

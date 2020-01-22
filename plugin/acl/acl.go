@@ -6,14 +6,11 @@ import (
 
 	"github.com/coredns/coredns/plugin"
 	"github.com/coredns/coredns/plugin/metrics"
-	clog "github.com/coredns/coredns/plugin/pkg/log"
 	"github.com/coredns/coredns/request"
 
 	"github.com/infobloxopen/go-trees/iptree"
 	"github.com/miekg/dns"
 )
-
-var log = clog.NewWithPlugin("acl")
 
 // ACL enforces access control policies on DNS queries.
 type ACL struct {
@@ -84,7 +81,7 @@ RulesCheckLoop:
 }
 
 // matchWithPolicies matches the DNS query with a list of ACL polices and returns suitable
-// action agains the query.
+// action against the query.
 func matchWithPolicies(policies []policy, w dns.ResponseWriter, r *dns.Msg) action {
 	state := request.Request{W: w, Req: r}
 

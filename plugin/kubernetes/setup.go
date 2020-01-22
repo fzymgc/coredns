@@ -10,6 +10,7 @@ import (
 
 	"github.com/coredns/coredns/core/dnsserver"
 	"github.com/coredns/coredns/plugin"
+	"github.com/coredns/coredns/plugin/metrics"
 	"github.com/coredns/coredns/plugin/pkg/dnsutil"
 	clog "github.com/coredns/coredns/plugin/pkg/log"
 	"github.com/coredns/coredns/plugin/pkg/parse"
@@ -34,12 +35,7 @@ import (
 
 var log = clog.NewWithPlugin("kubernetes")
 
-func init() {
-	caddy.RegisterPlugin("kubernetes", caddy.Plugin{
-		ServerType: "dns",
-		Action:     setup,
-	})
-}
+func init() { plugin.Register("kubernetes", setup) }
 
 func setup(c *caddy.Controller) error {
 	klog.SetOutput(os.Stdout)
@@ -55,6 +51,11 @@ func setup(c *caddy.Controller) error {
 	}
 
 	k.RegisterKubeCache(c)
+
+	c.OnStartup(func() error {
+		metrics.MustRegister(c, DnsProgrammingLatency)
+		return nil
+	})
 
 	dnsserver.GetConfig(c).AddPlugin(func(next plugin.Handler) plugin.Handler {
 		k.Next = next

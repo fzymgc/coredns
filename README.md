@@ -19,7 +19,7 @@ provided out of the box you can add it by [writing a plugin](https://coredns.io/
 
 CoreDNS can listen for DNS requests coming in over UDP/TCP (go'old DNS), TLS ([RFC
 7858](https://tools.ietf.org/html/rfc7858)), also called DoT, DNS over HTTP/2 - DoH -
-([RFC 8484](https://tools.ietf.org/html/rfc7858)) and [gRPC](https://grpc.io) (not a standard).
+([RFC 8484](https://tools.ietf.org/html/rfc8484)) and [gRPC](https://grpc.io) (not a standard).
 
 Currently CoreDNS is able to:
 
@@ -77,22 +77,20 @@ The above command alone will have `coredns` binary generated.
 ## Examples
 
 When starting CoreDNS without any configuration, it loads the
-[*whoami*](https://coredns.io/plugins/whoami) plugin and starts listening on port 53 (override with
-`-dns.port`), it should show the following:
+[*whoami*](https://coredns.io/plugins/whoami) and [*log*](https://coredns.io/plugins/log) plugins
+and starts listening on port 53 (override with `-dns.port`), it should show the following:
 
 ~~~ txt
 .:53
-2016/09/18 09:20:50 [INFO] CoreDNS-001
-CoreDNS-001
+CoreDNS-1.6.6
+linux/amd64, go1.13.5, aa8c32
 ~~~
 
 Any query sent to port 53 should return some information; your sending address, port and protocol
-used.
+used. The query should also be logged to standard output.
 
 If you have a Corefile without a port number specified it will, by default, use port 53, but you can
-override the port with the `-dns.port` flag:
-
-`./coredns -dns.port 1053`, runs the server on port 1053.
+override the port with the `-dns.port` flag: `coredns -dns.port 1053`, runs the server on port 1053.
 
 Start a simple proxy. You'll need to be root to start listening on port 53.
 
@@ -105,11 +103,11 @@ Start a simple proxy. You'll need to be root to start listening on port 53.
 }
 ~~~
 
-Just start CoreDNS: `./coredns`. Then just query on that port (53). The query should be forwarded
-to 8.8.8.8 and the response will be returned. Each query should also show up in the log which is
-printed on standard output.
+Start CoreDNS and then query on that port (53). The query should be forwarded to 8.8.8.8 and the
+response will be returned. Each query should also show up in the log which is printed on standard
+output.
 
-Serve the (NSEC) DNSSEC-signed `example.org` on port 1053, with errors and logging sent to standard
+To serve the (NSEC) DNSSEC-signed `example.org` on port 1053, with errors and logging sent to standard
 output. Allow zone transfers to everybody, but specifically mention 1 IP address so that CoreDNS can
 send notifies to it.
 
@@ -128,14 +126,18 @@ Serve `example.org` on port 1053, but forward everything that does *not* match `
 recursive nameserver *and* rewrite ANY queries to HINFO.
 
 ~~~ txt
-.:1053 {
-    rewrite ANY HINFO
-    forward . 8.8.8.8:53
-
-    file /var/lib/coredns/example.org.signed example.org {
+example.org:1053 {
+    file /var/lib/coredns/example.org.signed {
         transfer to *
         transfer to 2001:500:8f::53
     }
+    errors
+    log
+}
+
+. {
+    any
+    forward . 8.8.8.8:53
     errors
     log
 }

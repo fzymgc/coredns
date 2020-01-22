@@ -11,6 +11,7 @@ import (
 	_ "github.com/coredns/coredns/plugin/autopath"
 	_ "github.com/coredns/coredns/plugin/azure"
 	_ "github.com/coredns/coredns/plugin/bind"
+	_ "github.com/coredns/coredns/plugin/bufsize"
 	_ "github.com/coredns/coredns/plugin/cache"
 	_ "github.com/coredns/coredns/plugin/cancel"
 	_ "github.com/coredns/coredns/plugin/chaos"
@@ -45,6 +46,7 @@ import (
 	_ "github.com/coredns/coredns/plugin/template"
 	_ "github.com/coredns/coredns/plugin/tls"
 	_ "github.com/coredns/coredns/plugin/trace"
+	_ "github.com/coredns/coredns/plugin/transfer"
 	_ "github.com/coredns/coredns/plugin/whoami"
 	_ "github.com/coredns/federation"
 )

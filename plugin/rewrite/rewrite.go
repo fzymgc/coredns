@@ -29,7 +29,7 @@ const (
 	Continue = "continue"
 )
 
-// Rewrite is plugin to rewrite requests internally before being handled.
+// Rewrite is a plugin to rewrite requests internally before being handled.
 type Rewrite struct {
 	Next     plugin.Handler
 	Rules    []Rule
@@ -61,7 +61,6 @@ func (rw Rewrite) ServeDNS(ctx context.Context, w dns.ResponseWriter, r *dns.Msg
 				return plugin.NextOrFailure(rw.Name(), rw.Next, ctx, wr, r)
 			}
 		case RewriteIgnored:
-			break
 		}
 	}
 	if rw.noRevert || len(wr.ResponseRules) == 0 {
