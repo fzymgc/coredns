@@ -39,6 +39,7 @@ var Directives = []string{
 	"federation",
 	"k8s_external",
 	"kubernetes",
+	"cassandra",
 	"file",
 	"auto",
 	"secondary",
