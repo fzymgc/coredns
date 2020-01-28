@@ -12,7 +12,7 @@ require (
 	github.com/coredns/federation v0.0.0-20190818181423-e032b096babe
 	github.com/dnstap/golang-dnstap v0.0.0-20170829151710-2cf77a2b5e11
 	github.com/farsightsec/golang-framestream v0.0.0-20181102145529-8a0cb8ba8710
-	github.com/fzymgc/coredns-cassandra v0.0.2
+	github.com/fzymgc/coredns-cassandra v0.0.4
 	github.com/golang/protobuf v1.3.2
 	github.com/grpc-ecosystem/grpc-opentracing v0.0.0-20180507213350-8e809c8a8645
 	github.com/infobloxopen/go-trees v0.0.0-20190313150506-2af4e13f9062
